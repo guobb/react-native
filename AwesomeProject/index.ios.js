@@ -8,42 +8,104 @@ import {
   View
 } from 'react-native';
 
-export default class git extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
-    );
-  }
-}
+import ToiletPage from './ios_views/toiletPage';
+import Setting from './ios_views/setting';
+import Read from './ios_views/read';
+import Wheather from './ios_views/weather';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+let base64Icon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAQAAACSR7JhAAADtUlEQVR4Ac3YA2Bj6QLH0XPT1Fzbtm29tW3btm3bfLZtv7e2ObZnms7d8Uw098tuetPzrxv8wiISrtVudrG2JXQZ4VOv+qUfmqCGGl1mqLhoA52oZlb0mrjsnhKpgeUNEs91Z0pd1kvihA3ULGVHiQO2narKSHKkEMulm9VgUyE60s1aWoMQUbpZOWE+kaqs4eLEjdIlZTcFZB0ndc1+lhB1lZrIuk5P2aib1NBpZaL+JaOGIt0ls47SKzLC7CqrlGF6RZ09HGoNy1lYl2aRSWL5GuzqWU1KafRdoRp0iOQEiDzgZPnG6DbldcomadViflnl/cL93tOoVbsOLVM2jylvdWjXolWX1hmfZbGR/wjypDjFLSZIRov09BgYmtUqPQPlQrPapecLgTIy0jMgPKtTeob2zWtrGH3xvjUkPCtNg/tm1rjwrMa+mdUkPd3hWbH0jArPGiU9ufCsNNWFZ40wpwn+62/66R2RUtoso1OB34tnLOcy7YB1fUdc9e0q3yru8PGM773vXsuZ5YIZX+5xmHwHGVvlrGPN6ZSiP1smOsMMde40wKv2VmwPPVXNut4sVpUreZiLBHi0qln/VQeI/LTMYXpsJtFiclUN+5HVZazim+Ky+7sAvxWnvjXrJFneVtLWLyPJu9K3cXLWeOlbMTlrIelbMDlrLenrjEQOtIF+fuI9xRp9ZBFp6+b6WT8RrxEpdK64BuvHgDk+vUy+b5hYk6zfyfs051gRoNO1usU12WWRWL73/MMEy9pMi9qIrR4ZpV16Rrvduxazmy1FSvuFXRkqTnE7m2kdb5U8xGjLw/spRr1uTov4uOgQE+0N/DvFrG/Jt7i/FzwxbA9kDanhf2w+t4V97G8lrT7wc08aA2QNUkuTfW/KimT01wdlfK4yEw030VfT0RtZbzjeMprNq8m8tnSTASrTLti64oBNdpmMQm0eEwvfPwRbUBywG5TzjPCsdwk3IeAXjQblLCoXnDVeoAz6SfJNk5TTzytCNZk/POtTSV40NwOFWzw86wNJRpubpXsn60NJFlHeqlYRbslqZm2jnEZ3qcSKgm0kTli3zZVS7y/iivZTweYXJ26Y+RTbV1zh3hYkgyFGSTKPfRVbRqWWVReaxYeSLarYv1Qqsmh1s95S7G+eEWK0f3jYKTbV6bOwepjfhtafsvUsqrQvrGC8YhmnO9cSCk3yuY984F1vesdHYhWJ5FvASlacshUsajFt2mUM9pqzvKGcyNJW0arTKN1GGGzQlH0tXwLDgQTurS8eIQAAAABJRU5ErkJggg==';
+
+
+class AwesomeProject extends React.Component {
+
+  state = {
+        selectedTab: 'toilet',
+        notifCount: 0,
+        presses: 0,
+    };
+
+    _renderContent = (moduleName) => {
+        let view = <ToiletPage/>;
+
+        switch (moduleName){
+            case 'toilet':
+              view = <ToiletPage/>;
+              break;
+            case 'read':
+              view = <Read/>;
+              break;
+            case 'weather':
+              view = <Wheather/>;
+              break;
+            case 'setting':
+              view = <Setting/>;
+              break;
+            default:
+              view = <ToiletPage/>;
+              break;
+        }
+        return view;
+};
+
+//1.引入TabBarIOS
+//2.查阅并使用文档
+    render () {
+      return (
+          <TabBarIOS>
+            <TabBarIOS.Item
+                title="卫生间"
+                icon={{uri: base64Icon, scale: 3}}
+                selected={this.state.selectedTab === 'toilet'}
+                onPress={() => {
+                    this.setState({
+                        selectedTab: 'toilet',
+                    });
+                }}>
+            >
+                {this._renderContent(ToiletPage)}
+            </TabBarIOS.Item>
+            <TabBarIOS.Item
+                title="阅读"
+                icon={{uri: base64Icon, scale: 3}}
+                selected={this.state.selectedTab === 'read'}
+                onPress={() => {
+                    this.setState({
+                        selectedTab: 'read',
+                    });
+                }}>
+            >
+                {this._renderContent(Read)}
+            </TabBarIOS.Item>
+            <TabBarIOS.Item
+                title="天气"
+                icon={{uri: base64Icon, scale: 3}}
+                selected={this.state.selectedTab === 'weather'}
+                onPress={() => {
+                    this.setState({
+                        selectedTab: 'weather',
+                    });
+                }}>
+            >
+                {this._renderContent(Wheather)}
+            </TabBarIOS.Item>
+            <TabBarIOS.Item
+                title="设置"
+                icon={{uri: base64Icon, scale: 3}}
+                onPress={() => {
+                    this.setState({
+                        selectedTab: 'setting',
+                    });
+                }}>
+                selected={this.state.selectedTab === 'setting'}
+            >
+                {this._renderContent(Setting)}
+            </TabBarIOS.Item>
+          </TabBarIOS>
+      )
+    }
+
+
+
+}
 
 AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
