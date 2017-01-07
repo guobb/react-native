@@ -7,11 +7,13 @@ import {
     View
 } from 'react-native';
 
+import TWebView from './twebview';
+
 class Wheather extends Component{
     render(){
         return (
-            <View style={styles.text}>
-                天气
+            <View style={styles.container}>
+                <TWebView url=""/>
             </View>
         )
     }
@@ -19,8 +21,8 @@ class Wheather extends Component{
 
 
 var styles = StyleSheet.create({
-    text: {
-        fontSize: 60
+    container: {
+        flex: 1
     }
 });
 module.exports = Wheather;
