@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 
 import Category from './read/category';
-import List from './read/list';
 import Recommend from './read/recommend';
 import Search from './read/search';
 import Topic from './read/topic';
@@ -39,14 +38,15 @@ class ReadView extends Component{
                 <Hr/>
                 {
                     this.state.isShow?
-                    <ScrollView style={styles.container}>
-                        <Topic/>
+                    <ScrollView style={[styles.container]}>
+                        <Topic data={ this.state.recommendTopic } navigator={this.props.navigator}/>
                         <Hr/>
-                        <Recommend/>
+                        <Recommend name="热门推荐" data={this.state.hotTopic} navigator={this.props.navigator}/>
                         <Hr/>
-                        <Category/>
+                        <Category data={this.state.category} navigator={this.props.navigator}/>
                         <Hr/>
-                        <Recommend/>
+                        <Recommend name="清新一刻" data={this.state.other} navigator={this.props.navigator}/>
+                        <View style={{height:60}}></View>
                     </ScrollView>
                     : null
                 }
@@ -56,8 +56,25 @@ class ReadView extends Component{
     }
     // todo: fecth data
     componentDidMount(){
-        this.setState({
-            isShow: true
+        var that = this;
+        Util.get('http://localhost:3000/data/read?type=config', function (data) {
+            if(data.status === 1){
+                let obj = data.data;
+                let hotTopic = obj.hotTopic;
+                let recomendTopic = obj.recommendTopic;
+                let other = obj.other;
+                let category = obj.category;
+
+                that.setState({
+                    isShow: true,
+                    recomendTopic: recomendTopic,
+                    hotTopic: hotTopic,
+                    other: other,
+                    category: category
+                });
+            }
+        }, function (err) {
+            
         })
     }
 }

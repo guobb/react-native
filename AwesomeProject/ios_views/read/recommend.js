@@ -4,37 +4,71 @@ import {
     AppRegistry,
     StyleSheet,
     Text,
-    View
+    View,
+    Image,
+    TouchableOpacity
 } from 'react-native';
 
 import Util from '../util';
+import TWebView from '../twebview';
+
+
 class recommend extends Component{
+
+    constructor(props){
+        super(props);
+        this.state = {
+            name: props.name,
+            data: props.data
+        }
+    }
+
     render(){
+        let data = this.state.data;
+        let views1 = [];
+        let views2 = [];
+
+        for(var i in data){
+            let item = (
+                    <TouchableOpacity
+                        style={[styles.img_item, styles.shadow]}
+                        key={i}
+                        onPress={this._showWebPage.bind(this, data[i].url, data[i].title)}
+                    >
+                        <Image style={styles.img} source = {{ url: data[i].img}}/>
+                        <Text style={styles.title} numberOfLines={2}>{data[1].title}</Text>
+                    </TouchableOpacity>
+            );
+            if(i < 4){
+                views1.push(item);
+            }else {
+                views2.push(item);
+            }
+
+        }
+
         return (
             <View style={styles.container}>
                 <View>
-                    <Text style={[styles.text1, styles.title_top]}>热门推荐</Text>
+                    <Text style={[styles.text1, styles.title_top]}>{this.state.name}</Text>
                 </View>
                 <View style={styles.img_view}>
-                    <View style={[styles.img_item, styles.shadow]}>
-                         <Image style={styles.img} source/>
-                         <Text style={styles.title} numberOfLines={2}>标题</Text>
-                    </View>
-                    <View style={styles.img_item}>
-                        <Image source/>
-                        <Text>标题</Text>
-                    </View>
-                    <View style={styles.img_item}>
-                        <Image source/>
-                        <Text>标题</Text>
-                    </View>
-                    <View style={styles.img_item}>
-                        <Image source/>
-                        <Text>标题</Text>
-                    </View>
+                    {views1}
+                </View>
+                <View style={styles.img_view}>
+                    {views2}
                 </View>
             </View>
         )
+    }
+    _showWebPage(url, title){
+        this.props.navigator.push({
+            component: TWebView,
+            title: title,
+            passProps: {
+                url: url
+            }
+        })
     }
 }
 
