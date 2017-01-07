@@ -8,6 +8,7 @@ import {
     WebView
 } from 'react-native';
 import Twebview from './twebview';
+import Util from './util';
 
 class ToiletPage extends Component{
     render(){
